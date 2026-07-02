@@ -85,7 +85,6 @@ week-end-pionnier-berlin/
 ## 👤 Author
 
 **Jean Yves Nkwane**  
-Web Developer
 
 - 🐙 GitHub: [@Nejy190501](https://github.com/Nejy190501)
 
