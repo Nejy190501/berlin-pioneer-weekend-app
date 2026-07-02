@@ -1,6 +1,7 @@
 <div align="center">
   <h1>🐻 Week-end Pionnier Berlin</h1>
   <p><strong>Your Ultimate Companion App for the Pioneer Weekend</strong></p>
+  <h3><a href="https://programme-week-end-pionnier-berlin-fr.netlify.app/">🚀 View Live Demo</a></h3>
 
   <p>
     <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" /></a>
