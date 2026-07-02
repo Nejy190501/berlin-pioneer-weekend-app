@@ -1,0 +1,6 @@
+{
+  "name": "Week-end Pionnier",
+  "description": "Un guide et programme interactif d'assemblée pour le week-end pionnier à Berlin. Suivi d'événements en temps réel, cartes de navigation, notes et infos pratiques.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
