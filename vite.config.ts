@@ -10,46 +10,7 @@ export default defineConfig(() => {
       react(), 
       tailwindcss(),
       VitePWA({
-        registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-        workbox: {
-          // Force the new SW to activate immediately (skip waiting)
-          skipWaiting: true,
-          clientsClaim: true,
-          // Don't precache HTML — always fetch fresh from network
-          navigateFallback: undefined,
-          // Only precache JS/CSS assets (they have unique hashes in filenames)
-          globPatterns: ['**/*.{js,css,ico,png,svg,woff2}'],
-          // Runtime caching: network-first for HTML pages
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/programme-week-end-pionnier-berlin-fr\.netlify\.app\/.*$/,
-              handler: 'NetworkFirst',
-              options: {
-                cacheName: 'pages-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60, // 1 hour
-                },
-              },
-            },
-          ],
-        },
-        manifest: {
-          name: 'Week-end Pionnier',
-          short_name: 'Pionnier',
-          description: 'L\'application officielle pour votre week-end pionnier.',
-          theme_color: '#fafaf9',
-          background_color: '#fafaf9',
-          display: 'standalone',
-          icons: [
-            {
-              src: 'favicon.ico',
-              sizes: '64x64 32x32 24x24 16x16',
-              type: 'image/x-icon'
-            }
-          ]
-        }
+        selfDestroying: true
       })
     ],
     resolve: {
