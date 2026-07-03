@@ -1352,6 +1352,11 @@ export default function App() {
         onSave={handleSaveConfigs}
         events={events}
         onSaveEvents={handleSaveEvents}
+        language={language}
+        onLanguageChange={(lang: Language) => {
+          setLanguage(lang);
+          localStorage.setItem("PIONEER_LANG", lang);
+        }}
       />
 
       {/* Floating Scroll to Top */}
