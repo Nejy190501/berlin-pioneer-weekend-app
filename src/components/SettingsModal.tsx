@@ -23,7 +23,8 @@ import {
   HelpCircle, 
   Calendar 
 } from "lucide-react";
-import { DEFAULT_CONFIGS, DEFAULT_EVENTS } from "../utils/defaults";
+import { DEFAULT_CONFIGS, getDefaultEvents } from "../utils/defaults";
+import { t, Language } from "../utils/i18n";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -32,6 +33,8 @@ interface SettingsModalProps {
   onSave: (newConfigs: AppConfigs) => void;
   events: PioneerEvent[];
   onSaveEvents: (newEvents: PioneerEvent[]) => void;
+  language: Language | null;
+  onLanguageChange: (lang: Language) => void;
 }
 
 export default function SettingsModal({
@@ -41,6 +44,8 @@ export default function SettingsModal({
   onSave,
   events,
   onSaveEvents,
+  language,
+  onLanguageChange,
 }: SettingsModalProps) {
   // Tabs: "config" (logistics) | "events" (program scheduling)
   const [activeSubTab, setActiveSubTab] = useState<"config" | "events">("config");
@@ -96,7 +101,7 @@ export default function SettingsModal({
     if (
       window.confirm("Voulez-vous restaurer tout le programme d'activités de Berlin par défaut ?")
     ) {
-      setFormEvents([...DEFAULT_EVENTS]);
+      setFormEvents([...getDefaultEvents(language || "fr")]);
       setEditingEventId(null);
     }
   };
@@ -182,7 +187,7 @@ export default function SettingsModal({
           <div className="flex items-center gap-2.5 text-stone-800">
             <Sliders className="w-5 h-5 text-stone-500" />
             <h2 className="font-display font-light text-lg tracking-tight text-stone-900">
-              Personnaliser l'événement
+              {t("settingsTitle", language || "fr") || "Personnaliser l'événement"}
             </h2>
           </div>
           <button
@@ -205,7 +210,7 @@ export default function SettingsModal({
                   : "border-transparent hover:text-stone-850"
               }`}
             >
-              Logistique Générale
+              {t("tabConfig", language || "fr") || "Logistique Générale"}
             </button>
             <button
               onClick={() => setActiveSubTab("events")}
@@ -215,7 +220,7 @@ export default function SettingsModal({
                   : "border-transparent hover:text-stone-850"
               }`}
             >
-              Activités du Programme ({formEvents.length})
+              {t("tabEvents", language || "fr") || "Activités du Programme"} ({formEvents.length})
             </button>
           </div>
         )}
@@ -236,8 +241,22 @@ export default function SettingsModal({
                 <div className="p-4 bg-stone-50 border border-stone-200/60 rounded-2xl flex gap-3 text-stone-600 text-[13px] leading-relaxed font-light">
                   <Info className="w-4 h-4 text-stone-500 flex-shrink-0 mt-0.5" />
                   <p>
-                    Ajustez les informations clés de l'assemblée, les adresses, les organisateurs locaux et la date de démarrage globale. Tout est sauvegardé localement sur cet appareil.
+                    {t("configDesc", language || "fr") || "Ajustez les informations clés de l'assemblée, les adresses, les organisateurs locaux et la date de démarrage globale. Tout est sauvegardé localement sur cet appareil."}
                   </p>
+                </div>
+
+                <div className="space-y-1 mt-4">
+                  <label className="block text-[11px] font-mono uppercase tracking-widest text-stone-400">
+                    {t("language", language || "fr") || "Langue / Sprache"}
+                  </label>
+                  <select
+                    value={language || "fr"}
+                    onChange={(e) => onLanguageChange(e.target.value as Language)}
+                    className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-sm font-light text-stone-800 focus:outline-none focus:border-stone-900"
+                  >
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

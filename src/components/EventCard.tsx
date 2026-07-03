@@ -28,6 +28,7 @@ import {
   getOutlookCalendarUrl, 
   getYahooCalendarUrl 
 } from "../utils/calendar";
+import { t, Language } from "../utils/i18n";
 
 interface EventCardProps {
   key?: string;
@@ -43,6 +44,8 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
   const [mapDropdownOpen, setMapDropdownOpen] = useState(false);
   const [calDropdownOpen, setCalDropdownOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  const language = (localStorage.getItem("PIONEER_LANG") as Language) || "fr";
 
 
   // Helper to parse duration
@@ -77,31 +80,31 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
         return {
           icon: <Compass className="w-3.5 h-3.5" />,
           textColor: "text-stone-900",
-          badgeLabel: "Prédication",
+          badgeLabel: t("catMinistry", language),
         };
       case "food":
         return {
           icon: <Coffee className="w-3.5 h-3.5" />,
           textColor: "text-stone-900",
-          badgeLabel: "Repas fraternel",
+          badgeLabel: t("catFood", language),
         };
       case "relaxation":
         return {
           icon: <Trees className="w-3.5 h-3.5" />,
           textColor: "text-stone-900",
-          badgeLabel: "Détente",
+          badgeLabel: t("catRelaxation", language),
         };
       case "spiritual":
         return {
           icon: <BookOpen className="w-3.5 h-3.5" />,
           textColor: "text-stone-900",
-          badgeLabel: "Rassemblement",
+          badgeLabel: t("catSpiritual", language),
         };
       default:
         return {
           icon: <HelpCircle className="w-3.5 h-3.5" />,
           textColor: "text-stone-900",
-          badgeLabel: "Activité",
+          badgeLabel: t("catActivity", language) || "Activité",
         };
     }
   };
@@ -118,7 +121,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
     bgStyle = "bg-stone-50 select-none";
     stateBadge = (
       <span className="px-2 py-0.5 text-[10px] font-medium text-stone-400 bg-stone-100 rounded-md select-none">
-        Terminé
+        {t("statusPast", language)}
       </span>
     );
   } else if (state === "active") {
@@ -127,7 +130,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
     stateBadge = (
       <span className="relative flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-medium text-white bg-stone-900 rounded-md select-none">
         <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse"></span>
-        En Cours
+        {t("statusOngoing", language)}
       </span>
     );
   } else {
@@ -135,7 +138,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
     borderStyle = "border-stone-200 hover:border-stone-300";
     stateBadge = (
       <span className="px-2 py-0.5 text-[10px] font-medium text-stone-500 bg-stone-50 border border-stone-200 rounded-md select-none">
-        À Venir
+        {t("statusFuture", language)}
       </span>
     );
   }
@@ -182,7 +185,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
         <div className="flex items-center gap-2 text-stone-400 text-xs font-mono">
           <span>
             {event.timeEnd === "23:59"
-              ? (event.openEnded ? `À partir de ${event.timeStart}` : event.timeStart)
+              ? (event.openEnded ? `${t("fromTime", language)} ${event.timeStart}` : event.timeStart)
               : `${event.timeStart} — ${event.timeEnd}`}
           </span>
           {event.timeEnd !== "23:59" && (
@@ -226,10 +229,10 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
           <button
             onClick={() => setCalDropdownOpen(!calDropdownOpen)}
             className="text-xs font-light text-stone-400 hover:text-stone-900 flex items-center gap-1.5 transition-colors cursor-pointer p-1"
-            title="Ajouter à un calendrier"
+            title={t("addToCalendar", language)}
             id={`event-${event.id}-cal-btn`}
           >
-            <Calendar className="w-3.5 h-3.5" /> Ajouter
+            <Calendar className="w-3.5 h-3.5" /> {t("add", language) || "Ajouter"}
           </button>
 
           <AnimatePresence>
@@ -309,7 +312,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
               id={`event-${event.id}-map-btn`}
             >
               <MapPin className="w-3.5 h-3.5" />
-              S'y rendre
+              {t("navigate", language)}
             </a>
           ) : (
           <>
@@ -319,7 +322,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
             id={`event-${event.id}-map-btn`}
           >
             <MapPin className="w-3.5 h-3.5" />
-            S'y rendre
+            {t("navigate", language)}
           </button>
 
           {/* Micro-Dropdown menu for maps choices */}
@@ -378,7 +381,7 @@ export default function EventCard({ event, startDate, state, isFavorite, onToggl
                     }}
                     className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-stone-50 text-stone-600 hover:text-stone-900 text-left transition-colors cursor-pointer"
                   >
-                    <span>Copier l'adresse</span>
+                    <span>{t("copyAddress", language) || "Copier l'adresse"}</span>
                     {copied ? (
                       <Check className="w-3 h-3 text-emerald-500" />
                     ) : (

@@ -21,29 +21,35 @@ import {
   Heart,
   MessageCircle
 } from "lucide-react";
-import { PRACTICAL_CHECKLISTS } from "../utils/defaults";
+import { getPracticalChecklists } from "../utils/defaults";
+import { t, Language } from "../utils/i18n";
 import InteractiveMap, { MAP_LOCATIONS } from "./InteractiveMap";
 
 interface InfosPratiquesTabProps {
   configs: AppConfigs;
+  language: Language | null;
 }
 
-export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
+export default function InfosPratiquesTab({ configs, language }: InfosPratiquesTabProps) {
   // Main sub tab navigation
   const [currentSubTab, setCurrentSubTab] = useState<"general" | "places">("general");
 
   // Checklist local states
-  const [checklist] = useState(() => {
+  const [checklist, setChecklist] = useState(() => {
     const saved = localStorage.getItem("PIONEER_CHECKLIST");
     if (saved) {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        return PRACTICAL_CHECKLISTS;
+        return getPracticalChecklists(language || "fr");
       }
     }
-    return PRACTICAL_CHECKLISTS;
+    return getPracticalChecklists(language || "fr");
   });
+
+  useEffect(() => {
+    setChecklist(getPracticalChecklists(language || "fr"));
+  }, [language]);
 
   const [checkedIds, setCheckedIds] = useState<Record<string, boolean>>(() => {
     const savedStates = localStorage.getItem("PIONEER_CHECKLIST_STATES");
@@ -95,7 +101,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
           id="subtab-general-btn"
         >
           <Info className="w-4 h-4" />
-          <span className="text-sm">Infos & Logistique</span>
+          <span className="text-sm">{t("tabInfos", language || "fr")}</span>
         </button>
 
         <button
@@ -108,7 +114,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
           id="subtab-places-btn"
         >
           <Coffee className="w-4 h-4" />
-          <span className="text-sm">Bonnes Adresses</span>
+          <span className="text-sm">{t("goodAddresses", language || "fr")}</span>
         </button>
       </div>
 
@@ -124,7 +130,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
               <div className="flex items-center justify-between pb-4 mb-4">
                 <h3 className="font-display font-light text-stone-900 text-2xl flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-emerald-500" />
-                  Ma Préparation
+                  {t("myPrep", language || "fr")}
                 </h3>
                 <span className="text-[10px] font-medium text-stone-500 bg-stone-50 px-2 rounded-full border border-stone-200/60">
                   {completedCount} / {checklist.length}
@@ -178,7 +184,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
                 className="w-full py-2 text-xs text-stone-500 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 font-medium rounded-xl transition-colors cursor-pointer"
                 id="reset-checklist-btn"
               >
-                Réinitialiser la liste
+                {t("resetChecklist", language || "fr")}
               </button>
             </div>
           </div>
@@ -189,7 +195,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
               <div className="flex items-center justify-between pb-4 mb-4">
                 <h3 className="font-display font-light text-stone-900 text-2xl flex items-center gap-2">
                   <User className="w-5 h-5 text-stone-400" />
-                  Contacts Pratiques
+                  {t("practicalContacts", language || "fr")}
                 </h3>
               </div>
 
@@ -341,10 +347,10 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-stone-200/60 pb-6 gap-4">
             <div>
               <h3 className="font-display font-light text-stone-900 text-3xl tracking-tight mb-2">
-                Où aller ?
+                {t("whereToGo", language || "fr")}
               </h3>
               <p className="text-[13px] font-light text-stone-500">
-                Explorez tous les lieux de rassemblements et adresses utiles.
+                {t("whereToGoDesc", language || "fr")}
               </p>
             </div>
 
@@ -358,7 +364,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
                     : "text-stone-400 hover:text-stone-600"
                 }`}
               >
-                Tous
+                {t("catAll", language || "fr")}
                 {placesFilter === "all" && (
                   <motion.div layoutId="placesFilterInd" className="absolute bottom-0 left-0 right-0 h-px bg-stone-900" />
                 )}
@@ -371,7 +377,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
                     : "text-stone-400 hover:text-stone-600"
                 }`}
               >
-                Programme
+                {t("catProgram", language || "fr")}
                 {placesFilter === "rendezvous" && (
                   <motion.div layoutId="placesFilterInd" className="absolute bottom-0 left-0 right-0 h-px bg-stone-900" />
                 )}
@@ -384,7 +390,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
                     : "text-stone-400 hover:text-stone-600"
                 }`}
               >
-                Cafés
+                {t("catCafe", language || "fr")}
                 {placesFilter === "cafe" && (
                   <motion.div layoutId="placesFilterInd" className="absolute bottom-0 left-0 right-0 h-px bg-stone-900" />
                 )}
@@ -397,7 +403,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
                     : "text-stone-400 hover:text-stone-600"
                 }`}
               >
-                Repas
+                {t("catFood", language || "fr")}
                 {placesFilter === "food" && (
                   <motion.div layoutId="placesFilterInd" className="absolute bottom-0 left-0 right-0 h-px bg-stone-900" />
                 )}
@@ -410,7 +416,7 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
                     : "text-stone-400 hover:text-stone-600"
                 }`}
               >
-                Balades
+                {t("catVisit", language || "fr")}
                 {placesFilter === "visit" && (
                   <motion.div layoutId="placesFilterInd" className="absolute bottom-0 left-0 right-0 h-px bg-stone-900" />
                 )}
@@ -431,14 +437,14 @@ export default function InfosPratiquesTab({ configs }: InfosPratiquesTabProps) {
           <div className="space-y-4 pt-4">
             <div className="flex items-center justify-between">
               <h4 className="text-[10px] font-medium font-mono text-stone-400 uppercase tracking-widest">
-                Lieux correspondants ({MAP_LOCATIONS.filter((loc) => placesFilter === "all" || loc.category === placesFilter).length})
+                {t("matchingPlaces", language || "fr")} ({MAP_LOCATIONS.filter((loc) => placesFilter === "all" || loc.category === placesFilter).length})
               </h4>
               {selectedLocationId && (
                 <button
                   onClick={() => setSelectedLocationId(null)}
                   className="text-xs text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
                 >
-                  Réinitialiser
+                  {t("resetSelection", language || "fr")}
                 </button>
               )}
             </div>

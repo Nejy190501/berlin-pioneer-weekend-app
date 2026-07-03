@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pionierwochenende Berlin – Programm</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            background: #fff;
+            padding: 40px 50px;
+            line-height: 1.5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2563eb;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e3a5f;
+            margin-bottom: 4px;
+        }
+
+        .header .subtitle {
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .meta-info span {
+            font-size: 13px;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .day-section {
+            margin-bottom: 28px;
+            page-break-inside: avoid;
+        }
+
+        .day-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .day-friday .day-title { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .day-saturday .day-title { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .day-sunday .day-title { background: linear-gradient(135deg, #059669, #10b981); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+
+        tbody tr:hover { background: #f8fafc; }
+
+        .time-cell {
+            font-weight: 700;
+            color: #2563eb;
+            white-space: nowrap;
+            width: 110px;
+        }
+
+        .event-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .event-desc {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .location-cell {
+            color: #475569;
+            font-size: 12px;
+            width: 160px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .cat-ministry { background: #dbeafe; color: #1d4ed8; }
+        .cat-food { background: #fef3c7; color: #b45309; }
+        .cat-spiritual { background: #ede9fe; color: #7c3aed; }
+        .cat-relaxation { background: #d1fae5; color: #047857; }
+
+        .checklist-section {
+            margin-top: 28px;
+            page-break-inside: avoid;
+        }
+
+        .checklist-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 30px;
+        }
+
+        .checklist-item {
+            font-size: 13px;
+            color: #334155;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .contacts-section {
+            margin-top: 28px;
+            page-break-inside: avoid;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .contact-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+
+        .contact-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        .contact-phone {
+            font-size: 13px;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+        }
+
+        @media print {
+            body { padding: 20px 30px; }
+            .day-section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🐻 Pionierwochenende Berlin</h1>
+        <p class="subtitle">Vollständiges Programm – 28. bis 30. August 2026</p>
+        <div class="meta-info">
+            <span>📍 Königreichssaal – Naumburger Str. 37, 12057 Berlin</span>
+            <span>👥 Versammlung: Berlin Französisch</span>
+            <span>📊 15–50 Teilnehmer</span>
+        </div>
+    </div>
+
+    <!-- FREITAG -->
+    <div class="day-section day-friday">
+        <div class="day-title">🗓️ Freitag, 28. August</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Uhrzeit</th>
+                    <th>Programmpunkt</th>
+                    <th>Ort</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="time-cell">17:30</td>
+                    <td>
+                        <div class="event-name">Zusammenkunft für den Predigtdienst <span class="category-tag cat-ministry">Dienst</span></div>
+                        <div class="event-desc">Treffpunkt im Königreichssaal für den öffentlichen Dienst (Zeugnisgeben, Vorführwagen, usw.)</div>
+                    </td>
+                    <td class="location-cell">Königreichssaal</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">20:00</td>
+                    <td>
+                        <div class="event-name">Gemütlicher Abend <span class="category-tag cat-food">Essen</span></div>
+                        <div class="event-desc">Gemeinsames Abendessen im Restaurant oder gemütliches Beisammensein (wird noch festgelegt)</div>
+                    </td>
+                    <td class="location-cell">Wird noch bekannt gegeben</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SAMSTAG -->
+    <div class="day-section day-saturday">
+        <div class="day-title">🗓️ Samstag, 29. August</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Uhrzeit</th>
+                    <th>Programmpunkt</th>
+                    <th>Ort</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="time-cell">09:30</td>
+                    <td>
+                        <div class="event-name">Zusammenkunft für den Predigtdienst <span class="category-tag cat-ministry">Dienst</span></div>
+                        <div class="event-desc">Treffpunkt im Königreichssaal für die Predigtdienstbesprechung</div>
+                    </td>
+                    <td class="location-cell">Königreichssaal</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">10:00 – 12:00</td>
+                    <td>
+                        <div class="event-name">Predigtdienst in den Gebieten <span class="category-tag cat-ministry">Dienst</span></div>
+                        <div class="event-desc">Haus-zu-Haus und öffentliches Zeugnisgeben. Wer möchte, kann bis 13:00 Uhr weitermachen.</div>
+                    </td>
+                    <td class="location-cell">Gebiete</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">12:30 – 13:30</td>
+                    <td>
+                        <div class="event-name">Gemeinsames Mittagessen <span class="category-tag cat-food">Essen</span></div>
+                        <div class="event-desc">Imbiss zusammen im Königreichssaal</div>
+                    </td>
+                    <td class="location-cell">Königreichssaal</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">14:00 – 15:45</td>
+                    <td>
+                        <div class="event-name">Wochenend-Zusammenkunft <span class="category-tag cat-spiritual">Geistlich</span></div>
+                        <div class="event-desc">Versammlungszusammenkunft im Königreichssaal</div>
+                    </td>
+                    <td class="location-cell">Königreichssaal</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">16:15 – 16:30</td>
+                    <td>
+                        <div class="event-name">Kurze Dienstbesprechung <span class="category-tag cat-ministry">Dienst</span></div>
+                        <div class="event-desc">Für diejenigen, die noch weiter predigen möchten</div>
+                    </td>
+                    <td class="location-cell">Königreichssaal</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">ab 16:15</td>
+                    <td>
+                        <div class="event-name">Picknick auf dem Tempelhofer Feld <span class="category-tag cat-relaxation">Freizeit</span></div>
+                        <div class="event-desc">Gemeinsames Picknick für die ganze Versammlung. Unter dem großen Baum neben der Landebahn „27-rechts".</div>
+                    </td>
+                    <td class="location-cell">Tempelhofer Feld, Berlin</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SONNTAG -->
+    <div class="day-section day-sunday">
+        <div class="day-title">🗓️ Sonntag, 30. August</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Uhrzeit</th>
+                    <th>Programmpunkt</th>
+                    <th>Ort</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="time-cell">09:30</td>
+                    <td>
+                        <div class="event-name">Predigtdienst <span class="category-tag cat-ministry">Dienst</span></div>
+                        <div class="event-desc">In Gruppen oder alle zusammen (wird noch festgelegt)</div>
+                    </td>
+                    <td class="location-cell">Gebiete (wird noch festgelegt)</td>
+                </tr>
+                <tr>
+                    <td class="time-cell">ab 14:00</td>
+                    <td>
+                        <div class="event-name">Gemeinsames Essen & Gemeinschaft <span class="category-tag cat-food">Essen</span></div>
+                        <div class="event-desc">Gemütliches Beisammensein bei Brüdern und Schwestern der Versammlung. Danach freier Nachmittag zum Stadtbesichtigung oder zur Heimreise.</div>
+                    </td>
+                    <td class="location-cell">Bei Brüdern und Schwestern</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- CHECKLISTE -->
+    <div class="checklist-section">
+        <div class="checklist-title">📋 Checkliste – Was mitnehmen?</div>
+        <div class="checklist-grid">
+            <div class="checklist-item"><div class="checkbox"></div> Bibel (Papier oder JW Library App)</div>
+            <div class="checklist-item"><div class="checkbox"></div> Bequeme Laufschuhe</div>
+            <div class="checklist-item"><div class="checkbox"></div> Tagestext lesen</div>
+            <div class="checklist-item"><div class="checkbox"></div> Trinkflasche</div>
+            <div class="checklist-item"><div class="checkbox"></div> Predigtdiensttasche (Einladungen, Traktate)</div>
+            <div class="checklist-item"><div class="checkbox"></div> Regenschirm oder Regenjacke</div>
+            <div class="checklist-item"><div class="checkbox"></div> Kugelschreiber und Notizblock</div>
+            <div class="checklist-item"><div class="checkbox"></div> Essen/Snacks für das Picknick</div>
+        </div>
+    </div>
+
+    <!-- KONTAKTE -->
+    <div class="contacts-section">
+        <div class="checklist-title">📞 Kontaktpersonen</div>
+        <div class="contacts-grid">
+            <div class="contact-card">
+                <div class="contact-name">Florian</div>
+                <div style="font-size:11px;color:#64748b">Predigtdienstverantwortlicher</div>
+                <div class="contact-phone">+49 176 24363318</div>
+            </div>
+            <div class="contact-card">
+                <div class="contact-name">Jean Yves</div>
+                <div class="contact-phone">+49 1521 3974072</div>
+            </div>
+            <div class="contact-card">
+                <div class="contact-name">David</div>
+                <div class="contact-phone">+49 176 10864392</div>
+            </div>
+            <div class="contact-card">
+                <div class="contact-name">Liverance</div>
+                <div class="contact-phone">+49 1590 6403244</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Pionierwochenende Berlin 2026 – Versammlung Berlin Französisch &bull; Erstellt am 03.07.2026
+    </div>
+
+</body>
+</html>

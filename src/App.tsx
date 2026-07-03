@@ -8,9 +8,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { AppConfigs, PioneerEvent, DayOfWeek } from "./types";
 import {
   DEFAULT_CONFIGS,
-  DEFAULT_EVENTS,
+  getDefaultEvents,
   getEventState,
 } from "./utils/defaults";
+import { t, Language } from "./utils/i18n";
 import { downloadFullScheduleICS } from "./utils/calendar";
 import EventCard from "./components/EventCard";
 import InfosPratiquesTab from "./components/InfosPratiquesTab";
@@ -52,8 +53,14 @@ export default function App() {
 
   // Configs state
   const [configs, setConfigs] = useState<AppConfigs>(DEFAULT_CONFIGS);
+  
+  // Language State
+  const [language, setLanguage] = useState<Language | null>(() => {
+    return (localStorage.getItem("PIONEER_LANG") as Language) || null;
+  });
+
   // Events state
-  const [events, setEvents] = useState<PioneerEvent[]>(DEFAULT_EVENTS);
+  const [events, setEvents] = useState<PioneerEvent[]>(getDefaultEvents(language || "fr"));
   // Favorites state
   const [favorites, setFavorites] = useState<string[]>([]);
   // Active Tab
@@ -251,11 +258,11 @@ export default function App() {
       try {
         setEvents(JSON.parse(savedEvents));
       } catch (e) {
-        setEvents(DEFAULT_EVENTS);
+        setEvents(getDefaultEvents(language || "fr"));
       }
     } else {
-       setEvents(DEFAULT_EVENTS);
-       localStorage.setItem("PIONEER_EVENTS", JSON.stringify(DEFAULT_EVENTS));
+       setEvents(getDefaultEvents(language || "fr"));
+       localStorage.setItem("PIONEER_EVENTS", JSON.stringify(getDefaultEvents(language || "fr")));
     }
 
     const savedFavs = localStorage.getItem("PIONEER_FAVORITES");
@@ -439,54 +446,65 @@ export default function App() {
           exit={{ opacity: 0, filter: "blur(8px)" }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
           className="min-h-screen flex flex-col items-center justify-center p-8 select-none cursor-pointer"
-          onClick={handleSkipIntro}
+          onClick={language ? handleSkipIntro : undefined}
         >
-          <div className="max-w-md w-full text-center space-y-8 flex flex-col items-center justify-center">
-            <div className="space-y-4">
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="text-lg md:text-xl text-stone-600 font-light max-w-xs mx-auto px-4 leading-relaxed"
-              >
-                {timeGreeting} et bienvenue pour ce magnifique week-end parmi nous.
-              </motion.p>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-col items-center gap-4 pt-6"
-            >
-              {/* Ultra clean minimalist tiny loading bar */}
-              <div className="w-12 h-px bg-stone-200 rounded-full overflow-hidden relative">
-                <motion.div
-                  initial={{ left: "-100%" }}
-                  animate={{ left: "100%" }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  className="absolute top-0 bottom-0 w-1/3 bg-stone-400 rounded-full"
-                />
+          {!language ? (
+            <div className="max-w-md w-full text-center space-y-8 flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
+              <p className="text-xl md:text-2xl text-stone-600 font-light mb-8">
+                Choisissez votre langue<br/><span className="text-sm mt-2 block">Wählen Sie Ihre Sprache</span>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button onClick={() => { setLanguage("fr"); localStorage.setItem("PIONEER_LANG", "fr"); setEvents(getDefaultEvents("fr")); }} className="px-8 py-3 bg-stone-900 hover:bg-stone-800 transition-colors text-white rounded-full text-sm font-medium">🇫🇷 Français</button>
+                <button onClick={() => { setLanguage("de"); localStorage.setItem("PIONEER_LANG", "de"); setEvents(getDefaultEvents("de")); }} className="px-8 py-3 bg-stone-900 hover:bg-stone-800 transition-colors text-white rounded-full text-sm font-medium">🇩🇪 Deutsch</button>
               </div>
-            </motion.div>
+            </div>
+          ) : (
+            <div className="max-w-md w-full text-center space-y-8 flex flex-col items-center justify-center">
+              <div className="space-y-4">
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.8 }}
+                  className="text-lg md:text-xl text-stone-600 font-light max-w-xs mx-auto px-4 leading-relaxed"
+                >
+                  {language === "fr" ? timeGreeting : (currentHour >= 18 || currentHour < 5 ? "Guten Abend" : "Guten Tag")} {t("welcomeText", language)}
+                </motion.p>
+              </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2 }}
-              className="pt-2"
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSkipIntro();
-                }}
-                className="text-[10px] font-mono tracking-widest text-stone-400 hover:text-stone-900 transition-colors uppercase px-4 py-2 cursor-pointer select-none"
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="flex flex-col items-center gap-4 pt-6"
               >
-                Entrer
-              </button>
-            </motion.div>
-          </div>
+                <div className="w-12 h-px bg-stone-200 rounded-full overflow-hidden relative">
+                  <motion.div
+                    initial={{ left: "-100%" }}
+                    animate={{ left: "100%" }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                    className="absolute top-0 bottom-0 w-1/3 bg-stone-400 rounded-full"
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+                className="pt-2"
+              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSkipIntro();
+                  }}
+                  className="text-[10px] font-mono tracking-widest text-stone-400 hover:text-stone-900 transition-colors uppercase px-4 py-2 cursor-pointer select-none"
+                >
+                  {t("enterBtn", language)}
+                </button>
+              </motion.div>
+            </div>
+          )}
         </motion.div>
       ) : (
         <motion.div
@@ -514,11 +532,11 @@ export default function App() {
             <div className="flex flex-wrap items-center gap-3">
                <button onClick={handleShareApp} className="flex items-center gap-2 px-4 py-2 bg-stone-900 text-white rounded-full text-[13px] font-medium hover:bg-stone-800 transition-colors cursor-pointer select-none shadow-sm">
                   {copiedApp ? <Check className="w-3.5 h-3.5"/> : <Share2 className="w-3.5 h-3.5"/>}
-                  {copiedApp ? "Copié !" : "Partager"}
+                  {copiedApp ? t("linkCopied", language || "fr") : t("shareApp", language || "fr")}
                </button>
                <button onClick={() => downloadFullScheduleICS(events, configs.startDate)} className="flex items-center gap-2 px-4 py-2 bg-white border border-stone-200/80 text-stone-700 rounded-full text-[13px] font-medium hover:bg-stone-50 transition-colors cursor-pointer select-none shadow-sm">
                   <Calendar className="w-3.5 h-3.5"/> 
-                  Calendrier complet
+                  {t("addToCalendar", language || "fr")}
                </button>
 
             </div>
@@ -531,7 +549,7 @@ export default function App() {
                <div className="flex bg-stone-100 border border-stone-200 rounded-2xl p-4 gap-3 items-center text-stone-600 select-none">
                  <span className="w-1.5 h-1.5 rounded-full bg-stone-400"></span>
                  <div className="text-left">
-                   <p className="text-xs font-medium">Hors-ligne</p>
+                   <p className="text-xs font-medium">{t("offlineMode", language || "fr")}</p>
                    <p className="text-[10px] font-light">Données locales actives</p>
                  </div>
                </div>
@@ -545,8 +563,8 @@ export default function App() {
                >
                  <CalendarCheck className="w-4 h-4 text-amber-200 shrink-0 animate-pulse" />
                  <div>
-                   <p className="text-xs font-semibold">Installer l'appli</p>
-                   <p className="text-[10px] text-stone-300 font-light">Sur votre écran d'accueil</p>
+                   <p className="text-xs font-semibold">{t("installApp", language || "fr")}</p>
+                   <p className="text-[10px] text-stone-300 font-light">{t("addToHomeScreen", language || "fr")}</p>
                  </div>
                </button>
              )}
@@ -717,7 +735,7 @@ export default function App() {
                 : "text-stone-400 hover:text-stone-600"
             }`}
           >
-            Vue d'ensemble
+            {t("tabOverview", language || "fr")}
             {activeTab === "overview" && (
               <motion.div
                 layoutId="activeTabIndicator"
@@ -735,7 +753,7 @@ export default function App() {
                 : "text-stone-400 hover:text-stone-600"
             }`}
           >
-            Vendredi
+            {t("tabFri", language || "fr")}
             {activeTab === "fri" && (
               <motion.div
                 layoutId="activeTabIndicator"
@@ -753,7 +771,7 @@ export default function App() {
                 : "text-stone-400 hover:text-stone-600"
             }`}
           >
-            Samedi
+            {t("tabSat", language || "fr")}
             {activeTab === "sat" && (
               <motion.div
                 layoutId="activeTabIndicator"
@@ -771,7 +789,7 @@ export default function App() {
                 : "text-stone-400 hover:text-stone-600"
             }`}
           >
-            Dimanche
+            {t("tabSun", language || "fr")}
             {activeTab === "sun" && (
               <motion.div
                 layoutId="activeTabIndicator"
@@ -789,7 +807,7 @@ export default function App() {
                 : "text-stone-400 hover:text-stone-600"
             }`}
           >
-            Adresses & Infos
+            {t("tabInfos", language || "fr")}
             {activeTab === "info" && (
               <motion.div
                 layoutId="activeTabIndicator"
@@ -816,7 +834,7 @@ export default function App() {
                 }`}
               >
                 <Heart className={`w-3.5 h-3.5 ${selectedCategory === "favorites" ? "fill-red-500" : ""}`} />
-                Favoris
+                {t("catFavorites", language || "fr")}
                 {selectedCategory === "favorites" && (
                   <motion.div
                     layoutId="activeFilterIndicator"
@@ -834,7 +852,7 @@ export default function App() {
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
-                Tous
+                {t("catAll", language || "fr")}
                 {selectedCategory === "all" && (
                   <motion.div
                     layoutId="activeFilterIndicator"
@@ -853,7 +871,7 @@ export default function App() {
                 }`}
               >
                 <Compass className="w-3.5 h-3.5" />
-                Prédication
+                {t("catMinistry", language || "fr")}
                 {selectedCategory === "ministry" && (
                   <motion.div
                     layoutId="activeFilterIndicator"
@@ -872,7 +890,7 @@ export default function App() {
                 }`}
               >
                 <Coffee className="w-3.5 h-3.5" />
-                Repas
+                {t("catFood", language || "fr")}
                 {selectedCategory === "food" && (
                   <motion.div
                     layoutId="activeFilterIndicator"
@@ -891,7 +909,7 @@ export default function App() {
                 }`}
               >
                  <Sparkles className="w-3.5 h-3.5" />
-                 Détente
+                 {t("catRelaxation", language || "fr")}
                 {selectedCategory === "relaxation" && (
                   <motion.div
                     layoutId="activeFilterIndicator"
@@ -910,7 +928,7 @@ export default function App() {
                 }`}
               >
                  <BookOpen className="w-3.5 h-3.5" />
-                 Rassemblement
+                 {t("catSpiritual", language || "fr")}
                 {selectedCategory === "spiritual" && (
                   <motion.div
                     layoutId="activeFilterIndicator"
@@ -927,7 +945,7 @@ export default function App() {
               </span>
               <input
                 type="text"
-                placeholder="Rechercher une activité..."
+                placeholder={t("searchPlaceholder", language || "fr")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-9 pr-8 py-1.5 bg-white border border-stone-200/80 rounded-full text-xs font-light text-stone-700 placeholder-stone-400 focus:outline-none focus:border-stone-500 focus:ring-1 focus:ring-stone-500 transition-all shadow-xs"
@@ -958,20 +976,20 @@ export default function App() {
             >
               <div className="py-4 border-b border-stone-200/60 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
                 <p className="text-stone-500 font-light text-[13px] max-w-xl">
-                  Programme principal des trois jours. Cliquez sur les événements pour découvrir les informations liées.
+                  {t("overviewDesc", language || "fr")}
                 </p>
                 <div className="flex gap-4 text-xs font-light text-stone-500">
                   <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-stone-800 animate-pulse"></span>
-                    <span>En cours ({activeEventsCount})</span>
+                    <span>{t("statusOngoing", language || "fr")} ({activeEventsCount})</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-stone-300"></span>
-                    <span>Passés ({pastEventsCount})</span>
+                    <span>{t("statusPast", language || "fr")} ({pastEventsCount})</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full border border-stone-500"></span>
-                    <span>À venir ({futureEventsCount})</span>
+                    <span>{t("statusFuture", language || "fr")} ({futureEventsCount})</span>
                   </div>
                 </div>
               </div>
@@ -982,7 +1000,7 @@ export default function App() {
                 <div className="space-y-8">
                   <div className="pb-3 border-b border-stone-200/60">
                     <h2 className="font-display font-light text-stone-900 text-lg">
-                      Vendredi
+                      {t("friday", language || "fr")}
                     </h2>
                     <p className="text-stone-400 text-[13px] font-light mt-0.5">
                       {fryDayString}
@@ -998,7 +1016,7 @@ export default function App() {
                           exit={{ opacity: 0, scale: 0.95 }}
                           className="py-8 text-stone-400 text-sm text-center font-light"
                         >
-                          Aucun événement de type "{selectedCategory}" ce jour.
+                          {t("noEvents", language || "fr")}
                         </motion.div>
                       ) : (
                         getFilteredEvents("Vendredi").map((event) => {
@@ -1029,7 +1047,7 @@ export default function App() {
                 <div className="space-y-8">
                   <div className="pb-3 border-b border-stone-200/60">
                     <h2 className="font-display font-light text-stone-900 text-lg">
-                      Samedi
+                      {t("saturday", language || "fr")}
                     </h2>
                     <p className="text-stone-400 text-[13px] font-light mt-0.5">
                       {satDayString}
@@ -1045,7 +1063,7 @@ export default function App() {
                           exit={{ opacity: 0, scale: 0.95 }}
                           className="py-8 text-stone-400 text-sm text-center font-light"
                         >
-                          Aucun événement de type "{selectedCategory}" ce jour.
+                          {t("noEvents", language || "fr")}
                         </motion.div>
                       ) : (
                         getFilteredEvents("Samedi").map((event) => {
@@ -1076,7 +1094,7 @@ export default function App() {
                 <div className="space-y-8">
                   <div className="pb-3 border-b border-stone-200/60">
                     <h2 className="font-display font-light text-stone-900 text-lg">
-                      Dimanche
+                      {t("sunday", language || "fr")}
                     </h2>
                     <p className="text-stone-400 text-[13px] font-light mt-0.5">
                       {sunDayString}
@@ -1092,7 +1110,7 @@ export default function App() {
                           exit={{ opacity: 0, scale: 0.95 }}
                           className="py-8 text-stone-400 text-sm text-center font-light"
                         >
-                          Aucun événement de type "{selectedCategory}" ce jour.
+                          {t("noEvents", language || "fr")}
                         </motion.div>
                       ) : (
                         getFilteredEvents("Dimanche").map((event) => {
@@ -1133,16 +1151,13 @@ export default function App() {
             >
               <div className="pb-4 border-b border-stone-200/60">
                 <h2 className="font-display font-light text-stone-900 text-3xl">
-                  Vendredi
+                  {t("friday", language || "fr")}
                 </h2>
                 <p className="text-stone-400 font-light mt-1">
                   {fryDayString}
                 </p>
                 <p className="text-stone-500 leading-relaxed mt-4 font-light text-[15px]">
-                  Arrivées des participants en matinée. Rassemblement et
-                  prédication ciblée en après-midi à{" "}
-                  <span className="font-medium text-stone-800">{configs.kingdomHallAddress.split(",")[0]}</span>, puis moment de
-                  délassement en commun.
+                  {t("fridayDesc", language || "fr")}
                 </p>
               </div>
 
@@ -1155,8 +1170,7 @@ export default function App() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="p-6 bg-white/60 border border-stone-200 rounded-2xl text-stone-500 text-sm text-center"
                     >
-                      Aucun événement correspondant au filtre de catégorie
-                      sélectionné.
+                      {t("noEventsCategory", language || "fr")}
                     </motion.div>
                   ) : (
                     getFilteredEvents("Vendredi").map((event) => {
@@ -1195,15 +1209,13 @@ export default function App() {
             >
               <div className="pb-4 border-b border-stone-200/60">
                 <h2 className="font-display font-light text-stone-900 text-3xl">
-                  Samedi
+                  {t("saturday", language || "fr")}
                 </h2>
                 <p className="text-stone-400 font-light mt-1">
                   {satDayString}
                 </p>
                 <p className="text-stone-500 leading-relaxed mt-4 font-light text-[15px]">
-                  Une grande journée de prédication porte à porte et publique,
-                  suivie d'un repas partagé puis d'une sortie récréative à
-                  l'aéroport historique de Tempelhofer Feld.
+                  {t("saturdayDesc", language || "fr")}
                 </p>
               </div>
 
@@ -1216,8 +1228,7 @@ export default function App() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="p-6 bg-white/60 border border-stone-200 rounded-2xl text-stone-500 text-sm text-center"
                     >
-                      Aucun événement correspondant au filtre de catégorie
-                      sélectionné.
+                      {t("noEventsCategory", language || "fr")}
                     </motion.div>
                   ) : (
                     getFilteredEvents("Samedi").map((event) => {
@@ -1256,13 +1267,13 @@ export default function App() {
             >
               <div className="pb-4 border-b border-stone-200/60">
                 <h2 className="font-display font-light text-stone-900 text-3xl">
-                  Dimanche
+                  {t("sunday", language || "fr")}
                 </h2>
                 <p className="text-stone-400 font-light mt-1">
                   {sunDayString}
                 </p>
                 <p className="text-stone-500 leading-relaxed mt-4 font-light text-[15px]">
-                  Séance finale de ministère puis repas et moment convivial ensemble pour clore le week-end.
+                  {t("sundayDesc", language || "fr")}
                 </p>
               </div>
 
@@ -1275,8 +1286,7 @@ export default function App() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="p-6 bg-white/60 border border-stone-200 rounded-2xl text-stone-500 text-sm text-center"
                     >
-                      Aucun événement correspondant au filtre de catégorie
-                      sélectionné.
+                      {t("noEventsCategory", language || "fr")}
                     </motion.div>
                   ) : (
                     getFilteredEvents("Dimanche").map((event) => {
@@ -1312,7 +1322,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
             >
-              <InfosPratiquesTab configs={configs} />
+              <InfosPratiquesTab configs={configs} language={language} />
             </motion.div>
           )}
 
@@ -1324,11 +1334,11 @@ export default function App() {
         <div className="max-w-4xl mx-auto px-6 flex flex-col items-center gap-6">
           <div className="space-y-1.5 flex flex-col items-center">
             <p className="font-display font-light text-stone-600 text-sm flex items-center gap-1.5">
-              <span>Vos frères de Berlin - Französisch</span>
+              <span>{t("footerTitle", language || "fr")}</span>
               <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
             </p>
             <p className="text-[11px] font-light tracking-wide text-stone-400">
-              Avec toute notre affection.
+              {t("footerSubtitle", language || "fr")}
             </p>
           </div>
         </div>
