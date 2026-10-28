@@ -8,6 +8,7 @@
     <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" /></a>
     <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind-4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" /></a>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+      <a href="https://github.com/Nejy190501/berlin-pioneer-weekend-app/actions/workflows/ci.yml"><img src="https://github.com/Nejy190501/berlin-pioneer-weekend-app/actions/workflows/ci.yml/badge.svg" alt="CI Build" /></a>
   </p>
 </div>
 
@@ -114,3 +115,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <div align="center">
   <p>Made with 💻 and ❤️ for the Pioneer Weekend</p>
 </div>
+
+### ⚡ Progressive Web App (PWA) Features
+
+- **Offline First**: Service workers cache static assets and event schedules so the app remains fully accessible underground or with poor mobile reception.
+- **Mobile Installable**: Meets modern PWA installation criteria with Web App Manifest and custom icons for a native-like launcher icon.
+- **Fast Loading & Low Footprint**: Highly optimized bundle with Vite code-splitting and responsive Tailwind styling.
